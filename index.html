@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang=ru>
+<head>
+<meta charset=UTF-8>
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>TM</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;user-select:none;border-radius:0!important}body,html{height:100%;background:#000;color:#fff;font-family:sans-serif;overflow:hidden}.screen{display:none;height:100%;width:100%;flex-direction:column}.active{display:flex}button{border:none;font-weight:900;color:#fff}.b-m{flex:1;font-size:2rem;margin-bottom:2px}.red{background:red}.yellow{background:#fc0;color:#000}.green{background:#0f0;color:#000}.blue{background:#07f}.gray{background:#333}.map{flex:1;position:relative;background:#050505;display:flex;justify-content:center}.i-b{position:relative;height:95%}.i-b img{height:100%;border:1px solid #333}.hit{position:absolute;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}.h-h{top:2%;left:33%;width:34%;height:13%}.h-t{top:15%;left:25%;width:50%;height:35%}.h-al{top:20%;left:0;width:25%;height:40%}.h-ar{top:20%;right:0;width:25%;height:40%}.h-ll{bottom:2%;left:18%;width:32%;height:45%}.h-lr{bottom:2%;right:18%;width:32%;height:45%}.header{background:#222;font-size:1.5rem;text-align:center;padding:10px}.g{display:grid;grid-template-columns:1fr 1fr;flex:1;gap:1px}.opt{background:#222;font-size:1rem}.opt.sel{background:#fc0;color:#000}.opt.on{background:#0f0;color:#000}.nav{display:flex;height:12%}.n-b{flex:1;font-size:1.2rem}.list{flex:1;overflow-y:auto}.item{background:#111;padding:10px;border-left:10px solid #444;margin-bottom:2px}.item.crit{border-left-color:red}.m{font-size:2rem;font-weight:700;text-align:center;margin:auto}</style>
+</head>
+<body>
+<div id=s1 class="screen active">
+<button class="b-m red" onclick=u.s("s2")>КРАСНАЯ</button>
+<button class="b-m yellow" onclick=u.s("s3")>ЖЕЛТАЯ</button>
+<button class="b-m green" onclick=u.s("s1")>ЗЕЛЕНАЯ</button>
+</div>
+<div id=s2 class="screen red" style=justify-content:center>
+<div class=m>ТОЛЬКО ТУРНИКЕТ!</div>
+<button class="n-b gray" style=height:20% onclick=u.s("s1")>ГОТОВО</button>
+</div>
+<div id=s3 class=screen>
+<div id=lc class=list></div>
+<div class=nav>
+<button class="n-b blue" onclick=u.s("s4")>+ РАНЕНЫЙ</button>
+<button class="n-b gray" onclick=u.s("s1")>НАЗАД</button>
+</div>
+</div>
+<div id=s4 class=screen>
+<div class=map><div class=i-b>
+<img src=body.webp>
+<div class="hit h-h" onclick=a.t("Голова")></div>
+<div class="hit h-t" onclick=a.t("Торс")></div>
+<div class="hit h-al" onclick=a.t("Л.Рука")></div>
+<div class="hit h-ar" onclick=a.t("П.Рука")></div>
+<div class="hit h-ll" onclick=a.t("Л.Нога")></div>
+<div class="hit h-lr" onclick=a.t("П.Нога")></div>
+</div></div>
+<button class="n-b gray" style=height:10% onclick=u.s("s3")>ОТМЕНА</button>
+</div>
+<div id=s5 class=screen>
+<div class=header id=dt>ЗОНА</div>
+<div class=g>
+<button class=opt onclick=u.e(this,"type","Сильное")>СИЛЬНОЕ КР.</button>
+<button class=opt onclick=u.e(this,"type","Слабое")>СЛАБОЕ КР.</button>
+<button class=opt onclick=u.e(this,"type","Перелом")>ПЕРЕЛОМ</button>
+<button class="opt chk on" onclick=u.g(this,"breath")>ДЫШИТ</button>
+<button class="opt chk on" onclick=u.g(this,"pulse")>ПУЛЬС</button>
+<button class="opt chk on" onclick=u.g(this,"cons")>СОЗНАНИЕ</button>
+</div>
+<button class="n-b blue" style=height:20% onclick=a.v()>СОХРАНИТЬ</button>
+</div>
+<script>const a={d:{part:"",type:"",breath:!0,pulse:!0,cons:!0},l:[],t(e){this.d.part=e,document.getElementById("dt").innerText=e,u.s("s5")},v(){if(!this.d.type)return;let e="Сильное"===this.d.type||!this.d.breath||!this.d.pulse;e&&u.k("Критический!"),this.l.push({...this.d,crit:e,t:(new Date).toLocaleTimeString().slice(0,5)}),this.d={part:"",type:"",breath:!0,pulse:!0,cons:!0},u.r(),u.s("s3")}},u={s(e){document.querySelectorAll(".screen").forEach(e=>e.classList.remove("active")),document.getElementById(e).classList.add("active"),"s5"===e&&(document.querySelectorAll(".opt").forEach(e=>e.classList.remove("sel")),document.querySelectorAll(".chk").forEach(e=>e.classList.add("on"))),"s2"===e&&this.k("Турникет!")},e(e,t,s){e.parentElement.querySelectorAll(".opt:not(.chk)").forEach(e=>e.classList.remove("sel")),e.classList.add("sel"),a.d[t]=s},g(e,t){a.d[t]=!a.d[t],e.classList.toggle("on")},k(e){const t=new SpeechSynthesisUtterance(e);t.lang="ru-RU",window.speechSynthesis.speak(t)},r(){document.getElementById("lc").innerHTML=a.l.map(e=>`<div class="item ${e.crit?"crit":""}"><b>${e.part}</b>: ${e.type}<br><small>${e.breath?"":"НЕТ ДЫХ. "}${e.t}</small></div>`).join("")}}</script>
+</body>
+</html>
